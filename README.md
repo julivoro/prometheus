@@ -17,7 +17,9 @@ go get github.com/prometheus/client_golang/prometheus/promhttp
 
 Start client:
 
-go run exporter.go
+By default without args listen :8080 and read dir E://
+
+go run exporter.go -dir=MY_FOLDER -listen=HOST:PORT
 
 Fetch metrics from server:
 
