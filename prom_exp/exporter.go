@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -40,11 +41,15 @@ func recursiveDirFileCounter(directory string) {
 }
 
 func main() {
-	myFolder := "E:" + string(os.PathSeparator) + "music"
-	go recursiveDirFileCounter(myFolder)
 
-	//run http server from port 8080 (or any other aviable),
+	myFolder := flag.String("dir", "E:"+string(os.PathSeparator), "Directory where to count files")
+	httpHostPort := flag.String("listen", ":8080", "Host and port of prom http server, default :8080")
+	flag.Parse()
+
+	go recursiveDirFileCounter(*myFolder)
+
+	//run http server
 	//handle metrics, including newly created my_folder_files_count
 	http.Handle("/metrics", promhttp.Handler())
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(*httpHostPort, nil))
 }
